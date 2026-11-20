@@ -15,9 +15,28 @@ local NotificationModule = require(Components.Notification)
 
 local New = Creator.New
 
+local function GetGuiParent()
+	if RunService:IsStudio() then
+		return LocalPlayer:WaitForChild("PlayerGui")
+	end
+	if type(gethui) == "function" then
+		local ok, hui = pcall(gethui)
+		if ok and hui then
+			return hui
+		end
+	end
+	local ok, coreGui = pcall(function()
+		return game:GetService("CoreGui")
+	end)
+	if ok and coreGui then
+		return coreGui
+	end
+	return LocalPlayer:WaitForChild("PlayerGui")
+end
+
 local ProtectGui = protectgui or (syn and syn.protect_gui) or function() end
 local GUI = New("ScreenGui", {
-	Parent = RunService:IsStudio() and LocalPlayer.PlayerGui or game:GetService("CoreGui"),
+	Parent = GetGuiParent(),
 })
 ProtectGui(GUI)
 NotificationModule:Init(GUI)
@@ -53,63 +72,21 @@ function Library:SafeCallback(Function, ...)
 
 	local Success, Event = pcall(Function, ...)
 	if not Success then
-		local _, i = Event:find(":%d+: ")
+		local _, i = tostring(Event):find(":%d+: ")
 
 		if not i then
-			
-function Library:SetAccent(Color)
-	assert(typeof(Color) == "Color3", "DimensiUI:SetAccent expects a Color3")
-	local ThemesModule = require(Root.Themes)
-	for _, ThemeData in pairs(ThemesModule) do
-		if type(ThemeData) == "table" and ThemeData.Accent then
-			ThemeData.Accent = Color
-		end
-	end
-	Creator.UpdateTheme()
-end
-
-function Library:Destroy()
-	Creator.Disconnect()
-	if GUI then
-		GUI:Destroy()
-	end
-	Library.Window = nil
-	Library.Unloaded = true
-end
-
-return Library:Notify({
+			return Library:Notify({
 				Title = "Interface",
 				Content = "Callback error",
-				SubContent = Event,
+				SubContent = tostring(Event),
 				Duration = 5,
 			})
 		end
 
-		
-function Library:SetAccent(Color)
-	assert(typeof(Color) == "Color3", "DimensiUI:SetAccent expects a Color3")
-	local ThemesModule = require(Root.Themes)
-	for _, ThemeData in pairs(ThemesModule) do
-		if type(ThemeData) == "table" and ThemeData.Accent then
-			ThemeData.Accent = Color
-		end
-	end
-	Creator.UpdateTheme()
-end
-
-function Library:Destroy()
-	Creator.Disconnect()
-	if GUI then
-		GUI:Destroy()
-	end
-	Library.Window = nil
-	Library.Unloaded = true
-end
-
-return Library:Notify({
+		return Library:Notify({
 			Title = "Interface",
 			Content = "Callback error",
-			SubContent = Event:sub(i + 1),
+			SubContent = tostring(Event):sub(i + 1),
 			Duration = 5,
 		})
 	end
@@ -151,12 +128,14 @@ end
 Library.Elements = Elements
 
 function Library:CreateWindow(Config)
-	assert(Config.Title, "Toggle - Missing Title")
+	assert(Config.Title, "Window - Missing Title")
 
 	Config.SubTitle = Config.SubTitle or ""
 	Config.TabWidth = Config.TabWidth or 170
 	Config.Size = Config.Size or UDim2.fromOffset(590, 470)
-	Config.Acrylic = Config.Acrylic or true
+	if Config.Acrylic == nil then
+		Config.Acrylic = true
+	end
 	Config.Theme = Config.Theme or "Dimensi"
 	Config.MinimizeKey = Config.MinimizeKey or Enum.KeyCode.LeftControl
 
@@ -193,15 +172,32 @@ function Library:SetTheme(Value)
 	end
 end
 
-function Library:Destroy()
-	if Library.Window then
-		Library.Unloaded = true
-		if Library.UseAcrylic then
-			Library.Window.AcrylicPaint.Model:Destroy()
+function Library:SetAccent(Color)
+	assert(typeof(Color) == "Color3", "DimensiUI:SetAccent expects a Color3")
+	local ThemesModule = require(Root.Themes)
+	for _, ThemeData in pairs(ThemesModule) do
+		if type(ThemeData) == "table" and ThemeData.Accent then
+			ThemeData.Accent = Color
 		end
-		Creator.Disconnect()
+	end
+	Creator.UpdateTheme()
+end
+
+function Library:Destroy()
+	if Library.Unloaded then
+		return
+	end
+	Library.Unloaded = true
+	if Library.Window and Library.UseAcrylic and Library.Window.AcrylicPaint and Library.Window.AcrylicPaint.Model then
+		pcall(function()
+			Library.Window.AcrylicPaint.Model:Destroy()
+		end)
+	end
+	Creator.Disconnect()
+	if Library.GUI then
 		Library.GUI:Destroy()
 	end
+	Library.Window = nil
 end
 
 function Library:ToggleAcrylic(Value)
@@ -229,28 +225,8 @@ function Library:Notify(Config)
 end
 
 if getgenv then
+	getgenv().DimensiUI = Library
 	getgenv().Fluent = Library
-end
-
-
-function Library:SetAccent(Color)
-	assert(typeof(Color) == "Color3", "DimensiUI:SetAccent expects a Color3")
-	local ThemesModule = require(Root.Themes)
-	for _, ThemeData in pairs(ThemesModule) do
-		if type(ThemeData) == "table" and ThemeData.Accent then
-			ThemeData.Accent = Color
-		end
-	end
-	Creator.UpdateTheme()
-end
-
-function Library:Destroy()
-	Creator.Disconnect()
-	if GUI then
-		GUI:Destroy()
-	end
-	Library.Window = nil
-	Library.Unloaded = true
 end
 
 return Library

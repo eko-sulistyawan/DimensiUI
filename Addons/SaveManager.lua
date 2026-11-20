@@ -146,26 +146,19 @@ local SaveManager = {} do
 	end
 
 	function SaveManager:RefreshConfigList()
-		local list = listfiles(self.Folder .. "/settings")
+		self:BuildFolderTree()
+		local ok, list = pcall(listfiles, self.Folder .. "/settings")
+		if not ok or type(list) ~= "table" then
+			return {}
+		end
 
 		local out = {}
 		for i = 1, #list do
 			local file = list[i]
 			if file:sub(-5) == ".json" then
-				local pos = file:find(".json", 1, true)
-				local start = pos
-
-				local char = file:sub(pos, pos)
-				while char ~= "/" and char ~= "\\" and char ~= "" do
-					pos = pos - 1
-					char = file:sub(pos, pos)
-				end
-
-				if char == "/" or char == "\\" then
-					local name = file:sub(pos + 1, start - 1)
-					if not name == "options" then
-						table.insert(out, name)
-					end
+				local name = file:match("([^/\\]+)%.json$")
+				if name and name ~= "options" then
+					table.insert(out, name)
 				end
 			end
 		end
@@ -295,6 +288,14 @@ local SaveManager = {} do
 		local AutoloadButton
 		AutoloadButton = section:AddButton({Title = "Set as autoload", Description = "Current autoload config: none", Callback = function()
 			local name = SaveManager.Options.SaveManager_ConfigList.Value
+			if not name or name == "" then
+				return self.Library:Notify({
+					Title = "Interface",
+					Content = "Config loader",
+					SubContent = "No config file is selected",
+					Duration = 5
+				})
+			end
 			writefile(self.Folder .. "/settings/autoload.txt", name)
 			AutoloadButton:SetDesc("Current autoload config: " .. name)
 			self.Library:Notify({

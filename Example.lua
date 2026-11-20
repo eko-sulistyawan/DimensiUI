@@ -1,6 +1,6 @@
-local DimensiUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/your-org/DimensiUI/main/dist/main.lua"))()
-local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/your-org/DimensiUI/main/Addons/SaveManager.lua"))()
-local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/your-org/DimensiUI/main/Addons/InterfaceManager.lua"))()
+local DimensiUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/eko-sulistyawan/DimensiUI/refs/heads/main/dist/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/eko-sulistyawan/DimensiUI/refs/heads/main/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/eko-sulistyawan/DimensiUI/refs/heads/main/Addons/InterfaceManager.lua"))()
 
 local Window = DimensiUI:CreateWindow({
 	Title = "DimensiUI",
