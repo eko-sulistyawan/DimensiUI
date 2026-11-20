@@ -14,6 +14,7 @@ local Window = DimensiUI:CreateWindow({
 
 local Tabs = {
 	Main = Window:AddTab({ Title = "Main", Icon = "layers" }),
+	Automation = Window:AddTab({ Title = "Automation", Icon = "sliders" }),
 	Settings = Window:AddTab({ Title = "Settings", Icon = "settings" }),
 }
 
@@ -22,13 +23,14 @@ local Options = DimensiUI.Options
 do
 	DimensiUI:Notify({
 		Title = "DimensiUI",
-		Content = "Interface siap digunakan.",
+		Content = "Interface siap digunakan dengan ikon aktif.",
+		SubContent = "Icon: " .. tostring(DimensiUI:GetIcon("layers")),
 		Duration = 4,
 	})
 
 	Tabs.Main:AddParagraph({
 		Title = "DimensiUI Rebuild",
-		Content = "Berbasis struktur Fluent 1.1.0 dengan tema bawaan Dimensi.",
+		Content = "Berbasis struktur Fluent 1.1.0 dengan tema bawaan Dimensi dan ikon Lucide.",
 	})
 
 	Tabs.Main:AddButton({
@@ -56,7 +58,7 @@ do
 		end,
 	})
 
-	local Toggle = Tabs.Main:AddToggle("SampleToggle", {
+	local Toggle = Tabs.Automation:AddToggle("SampleToggle", {
 		Title = "Auto Feature",
 		Default = false,
 	})
@@ -65,7 +67,7 @@ do
 		print("SampleToggle:", Options.SampleToggle.Value)
 	end)
 
-	local Slider = Tabs.Main:AddSlider("SampleSlider", {
+	local Slider = Tabs.Automation:AddSlider("SampleSlider", {
 		Title = "Delay (detik)",
 		Description = "Atur interval eksekusi",
 		Default = 1,
@@ -77,7 +79,7 @@ do
 		end,
 	})
 
-	local Dropdown = Tabs.Main:AddDropdown("SampleDropdown", {
+	local Dropdown = Tabs.Automation:AddDropdown("SampleDropdown", {
 		Title = "Mode",
 		Values = { "Mode A", "Mode B", "Mode C" },
 		Multi = false,
