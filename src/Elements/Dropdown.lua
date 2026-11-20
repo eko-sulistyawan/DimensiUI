@@ -28,7 +28,7 @@ function Element:New(Idx, Config)
 	}
 
 	local DropdownFrame = require(Components.Element)(Config.Title, Config.Description, self.Container, false)
-	DropdownFrame.DescLabel.Size = UDim2.new(1, -170, 0, 14)
+	DropdownFrame.DescLabel.Size = UDim2.new(1, -170, 0, 0)
 
 	Dropdown.SetTitle = DropdownFrame.SetTitle
 	Dropdown.SetDesc = DropdownFrame.SetDesc

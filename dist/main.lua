@@ -2008,7 +2008,9 @@ return function(Title, Desc, Parent, Hover)
 		Text = Title,
 		TextColor3 = Color3.fromRGB(240, 240, 240),
 		TextSize = 13,
+		TextWrapped = true,
 		TextXAlignment = Enum.TextXAlignment.Left,
+		AutomaticSize = Enum.AutomaticSize.Y,
 		Size = UDim2.new(1, 0, 0, 14),
 		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 		BackgroundTransparency = 1,
@@ -2027,7 +2029,7 @@ return function(Title, Desc, Parent, Hover)
 		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 		AutomaticSize = Enum.AutomaticSize.Y,
 		BackgroundTransparency = 1,
-		Size = UDim2.new(1, 0, 0, 14),
+		Size = UDim2.new(1, 0, 0, 0),
 		ThemeTag = {
 			TextColor3 = "SubText",
 		},
@@ -3054,8 +3056,8 @@ return function(Config)
 		Window.ContainerHolder.Position = UDim2.fromOffset(Config.TabWidth + 26, Value)
 	end)
 
-	local OldSizeX
-	local OldSizeY
+	local OldSizeX = Window.Size.X.Offset
+	local OldSizeY = Window.Size.Y.Offset
 	Window.Maximize = function(Value, NoPos, Instant)
 		Window.Maximized = Value
 		Window.TitleBar.MaxButton.Frame.Icon.Image = Value and Assets.Restore or Assets.Max
@@ -3073,6 +3075,9 @@ return function(Config)
 		Window.Size = UDim2.fromOffset(SizeX, SizeY)
 
 		if not NoPos then
+			if Value then
+				Window.Position = UDim2.fromOffset(0, 0)
+			end
 			PosMotor:setGoal({
 				X = Spring(Value and 0 or Window.Position.X.Offset, { frequency = 6 }),
 				Y = Spring(Value and 0 or Window.Position.Y.Offset, { frequency = 6 }),
@@ -3850,7 +3855,7 @@ function Element:New(Idx, Config)
 	}
 
 	local DropdownFrame = require(Components.Element)(Config.Title, Config.Description, self.Container, false)
-	DropdownFrame.DescLabel.Size = UDim2.new(1, -170, 0, 14)
+	DropdownFrame.DescLabel.Size = UDim2.new(1, -170, 0, 0)
 
 	Dropdown.SetTitle = DropdownFrame.SetTitle
 	Dropdown.SetDesc = DropdownFrame.SetDesc
@@ -4673,7 +4678,7 @@ function Element:New(Idx, Config)
 	local Dragging = false
 
 	local SliderFrame = require(Components.Element)(Config.Title, Config.Description, self.Container, false)
-	SliderFrame.DescLabel.Size = UDim2.new(1, -170, 0, 14)
+	SliderFrame.DescLabel.Size = UDim2.new(1, -170, 0, 0)
 
 	Slider.SetTitle = SliderFrame.SetTitle
 	Slider.SetDesc = SliderFrame.SetDesc

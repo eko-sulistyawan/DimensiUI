@@ -13,7 +13,9 @@ return function(Title, Desc, Parent, Hover)
 		Text = Title,
 		TextColor3 = Color3.fromRGB(240, 240, 240),
 		TextSize = 13,
+		TextWrapped = true,
 		TextXAlignment = Enum.TextXAlignment.Left,
+		AutomaticSize = Enum.AutomaticSize.Y,
 		Size = UDim2.new(1, 0, 0, 14),
 		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 		BackgroundTransparency = 1,
@@ -32,7 +34,7 @@ return function(Title, Desc, Parent, Hover)
 		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 		AutomaticSize = Enum.AutomaticSize.Y,
 		BackgroundTransparency = 1,
-		Size = UDim2.new(1, 0, 0, 14),
+		Size = UDim2.new(1, 0, 0, 0),
 		ThemeTag = {
 			TextColor3 = "SubText",
 		},
